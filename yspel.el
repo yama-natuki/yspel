@@ -23,6 +23,26 @@
 ;; Yahoo! Japan の校正支援サービスを利用した校正支援ツールです。
 ;;
 
+;;; Commands:
+;;
+;; Below are complete command list:
+;;
+;;  `yspel-previous-line'
+;;    previous-line.
+;;  `yspel-keyword-jump'
+;;    jumo to point.
+;;  `yspel'
+;;    Yahoo API による日本語校正支援システム。
+;;  `yspel-mode'
+;;    yspel occur mode.
+;;  `yspel-post-command-hook'
+;;    line number echo.
+;;
+;;; Customizable Options:
+;;
+;; Below are customizable option list:
+;;
+
 ;;; Usage
 
 ;; (require 'yspel)
@@ -253,7 +273,9 @@ functions that enable or disable Yspel Keyword mode.")
 								ShitekiWord yspel-coding-system) "]"))))
 		(sinfo (if (not ShitekiInfo) nil
 				 (decode-coding-string ShitekiInfo yspel-coding-system))))
-	(insert (concat lin len "\t" word "\t" keyword "\t<" sinfo ">\n"))))
+	(insert (propertize (concat lin len "\t" word "\t" keyword "\t<" sinfo ">\n")
+                        'yspel-start-marker (move-marker (make-marker) (string-to-number Line) (get-buffer yspel-target-buffer))
+                        'yspel-length (string-to-number Length)))))
 
 (defun yspel-keyword-jump ()
   "jumo to point."
@@ -315,8 +337,8 @@ key     binding
     (interactive)
 	(beginning-of-line)
 	(if (= (point) (point-max)) nil
-	  (let ((var1 (string-to-number (buffer-substring (point) (+ (point) 6))))
-			(len (string-to-number (buffer-substring (+ (point) 7) (+ (point) 10)))))
+	  (let ((var1 (get-text-property (point) 'yspel-start-marker))
+			(len (get-text-property (point) 'yspel-length)))
 		(switch-to-buffer-other-window  yspel-target-buffer)
 		(if (yspel-region-active-p) (deactivate-mark))
 		(yspel-highlight 0 (+ 1 var1) (+ var1 (+ 1 len)))
