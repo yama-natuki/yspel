@@ -326,10 +326,8 @@ key     binding
 		mode-name "yspel"
 		buffer-read-only t)
   (use-local-map yspel-mode-map)
-  (make-local-hook 'post-command-hook)
-  (make-local-hook 'pre-command-hook)
-  (setq post-command-hook 'yspel-post-command-hook)
-  (setq pre-command-hook 'yspel-pre-command-hook)
+  (add-hook 'post-command-hook 'yspel-post-command-hook nil t)
+  (add-hook 'pre-command-hook 'yspel-pre-command-hook nil t)
   (run-hooks 'yspel-mode-hook))
 
 (defun yspel-post-command-hook ()
