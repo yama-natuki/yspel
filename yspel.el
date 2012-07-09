@@ -378,3 +378,7 @@ key     binding
 
 (provide 'yspel)
 ;;; yspel.el ends here
+
+;; Local Variables:
+;; tab-width: 4
+;; End:
