@@ -244,9 +244,9 @@ functions that enable or disable Yspel Keyword mode.")
 					(ShitekiInfo (car (xml-node-children
 									   (car (xml-get-children (nth num Result) 'ShitekiInfo))))))
 				(setq num (+ 1 num))
-				(if (/= yspel-start-point 0)
-					(setq Line (number-to-string (+ yspel-start-point (string-to-number Line)))))
-				(yspel-format Line Length Surface ShitekiWord ShitekiInfo)))
+				(yspel-format (+ yspel-start-point (string-to-number Line))
+                              (string-to-number Length)
+                              Surface ShitekiWord ShitekiInfo)))
 			(yspel-window-set))))
   	  (message "%s" "Error")))
 
@@ -264,8 +264,8 @@ functions that enable or disable Yspel Keyword mode.")
 
 (defun yspel-format (Line Length Surface ShitekiWord ShitekiInfo)
   "Format yspel window."
-  (let ((lin (format "%6d:" (string-to-number Line)))
-		(len (format "%d   " (string-to-number Length)))
+  (let ((lin (format "%6d:" Line))
+		(len (format "%d   " Length))
 		(word (if (not Surface) nil
 				(format "%-12s" (decode-coding-string Surface yspel-coding-system))))
 		(keyword (if (not ShitekiWord) "\t\t\t"
@@ -274,8 +274,8 @@ functions that enable or disable Yspel Keyword mode.")
 		(sinfo (if (not ShitekiInfo) nil
 				 (decode-coding-string ShitekiInfo yspel-coding-system))))
 	(insert (propertize (concat lin len "\t" word "\t" keyword "\t<" sinfo ">\n")
-                        'yspel-start-marker (move-marker (make-marker) (string-to-number Line) (get-buffer yspel-target-buffer))
-                        'yspel-length (string-to-number Length)))))
+                        'yspel-start-marker (move-marker (make-marker) Line (get-buffer yspel-target-buffer))
+                        'yspel-length Length))))
 
 (defun yspel-keyword-jump ()
   "jumo to point."
