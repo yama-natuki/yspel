@@ -299,12 +299,12 @@ functions that enable or disable Yspel Keyword mode.")
 	(yspel-get (buffer-string))))
 
 (defun yspel-buffer-p ()
-  "yspelバッファの存在チェック"
+  "check is yspel buffer."
   (if (get-buffer yspel-buffer-name)
 	  (set-buffer yspel-buffer-name)))
 
 (defun yspel-window-p ()
-  "yspelウィンドウのチェック。"
+  "check is yspel window."
   (get-buffer-window (get-buffer yspel-buffer-name)))
 
 (defun yspel-mode ()
